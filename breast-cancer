@@ -1,0 +1,39 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+from google.colab import files
+uploaded = files.upload()
+
+kanser = pd.read_csv('breast-cancer.csv')
+kanser.head()
+kanser.info()
+
+
+X = kanser.drop(columns=['id', 'diagnosis'],axis=1)
+y = kanser['diagnosis']
+
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X,y, test_size=0.6, random_state=42)
+from sklearn.tree import DecisionTreeClassifier
+tree=DecisionTreeClassifier()
+model=tree.fit(X_train, y_train)
+model.score(X_test,y_test)          # DOĞRULUK ORANI
+
+
+import matplotlib.pyplot as plt
+from sklearn import tree
+plt.figure(figsize=(12,8))
+tree.plot_tree(model, filled=True)         # Ağaç dallarını görme
+plt.show()
+
+# Belirli bir örneğin özelliklerini al
+sample_data = kanser.iloc[165].drop(['id', 'diagnosis']).values.reshape(1, -1)
+# Tahmin yapma
+prediction = model.predict(sample_data)
+print(prediction)
+
+list(kanser.iloc[131])
+# M Kötü Huylu
+# B İyi Huylu
+
